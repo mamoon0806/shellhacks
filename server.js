@@ -7,5 +7,5 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'html/index.html'))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
-const router = require('./routes/google.js');
-app.use('/api', router);
+const rout = require('./routes/google.js');
+app.use('/api', rout);
