@@ -18,44 +18,44 @@
 <body>
   <main class="w-full min-h-screen py-8">
     <section class="items-center">
-      <h1 class="h1 font-bold text-2xl">
+      <h1 class="h1 font-bold text-4xl py-2">
         <p class="text-center">
           WalkMe
         </p>
       </h1>
-      <h2 class="h2 text-2xl">
+      <h2 class="h2 text-2xl py-2">
         <p class="text-center">
           A web application to help you find the safest route to your destination.
         </p>
       </h2>
 
       <!-- Search bar -->
-      <section class="flex items-center justify-center">
+      <section class="flex items-center justify-center py-8">
         <input 
           type="text"
-          class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-xl"
+          class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-md"
           id="fromDestinationTxtBox" 
-          placeholder="Enter starting address (or Current Location)"
+          placeholder="Enter starting address or current location"
           onkeydown="handleKeyPress(event, 'GetDirectionsButton')"
         >
         <input type="text"
-          class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-xl"
+          class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-md"
           id="destination"
           placeholder="Enter destination address"
           onkeydown="handleKeyPress(event, 'GetDirectionsButton')"
         >
         <button
-          class="w-1/4 p-2 m-2 border border-gray-400 rounded-md bg-blue-300 hover:bg-blue-500"
+          class="w-1/8 p-2 m-2 border border-gray-400 rounded-md bg-green-500 hover:bg-green-600"
           onclick="calculateAndDisplayRoute()"
         >
-          <p class="text-xl">
+          <p class="text-md">
             Get Directions
           </p>
         </button>
       </section>
       <!-- Map container -->
       <div class="flex justify-center">
-        <div id="map" class="flex h-96 w-3/4"></div>
+        <div id="map" class="flex mapbox border rounded-sm"></div>
       </div>
     </section>
   </main>
