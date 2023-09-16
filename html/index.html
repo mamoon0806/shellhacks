@@ -10,7 +10,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="../css/globals.css" rel="stylesheet">
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg&callback=initMap"
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg&libraries=visualization&callback=initMap"
     async defer></script>
 </head>
 
@@ -58,12 +59,14 @@
     // prompted by your browser. If you see the error "The Geolocation service
     // failed.", it means you probably did not give permission for the browser to
     // locate you.
-    let map, directionsService, directionsRenderer;
+    let map, directionsService, directionsRenderer, origin, heatmap;
+    let heatmapData = []; // Define an empty array to store heatmap data
 
     function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 0, lng: 0 },
         zoom: 14,
+        streetViewControl: false,
       });
 
       // Try HTML5 geolocation.
@@ -88,9 +91,17 @@
         },
         () => {
           handleLocationError(true, map.getCenter());
-        },
+        }
       );
-    };
+
+      // Initialize the heatmap layer
+      heatmap = new google.maps.visualization.HeatmapLayer({
+        data: heatmapData,
+        map: map,
+        radius: 8, // Adjust the radius as needed
+        opacity: 0.6, // Adjust the opacity as needed
+      });
+    }
 
     function calculateAndDisplayRoute() {
       const destination = document.getElementById('destination').value;
@@ -100,12 +111,46 @@
         return;
       }
 
-      const origin = map.getCenter();
+      const request = {
+        origin: map.getCenter(),
+        destination: destination,
+        travelMode: 'DRIVING',
+      };
 
+      directionsService.route(request, (result, status) => {
+        if (status === 'OK') {
+          directionsRenderer.setDirections(result);
+
+          // Extract points along the route for heatmap data
+          const route = result.routes[0].legs[0];
+          const path = route.steps.flatMap((step) => {
+            return google.maps.geometry.encoding.decodePath(step.polyline.points);
+          });
+
+          // Convert the path points to LatLng objects and add them to heatmapData
+          heatmapData = path.map((point) => {
+            return new google.maps.LatLng(point.lat(), point.lng());
+          });
+
+          // Set the new heatmap data
+          heatmap.setData(heatmapData);
+
+          // Calculate the route distance and set the heatmap radius
+          const routeDistance = route.distance.value;
+          const heatmapRadius = Math.min(50, Math.max(10, routeDistance / 100));
+
+          updateHeatmapRadius(heatmapRadius);
+        } else {
+          alert('Error: ' + status);
+        }
+      });
+    }
+
+    function calculateRoute(origin, destination) {
       const request = {
         origin: origin,
         destination: destination,
-        travelMode: 'DRIVING' // You can change the travel mode as needed
+        travelMode: 'WALKING' // You can change the travel mode as needed
       };
 
       directionsService.route(request, (result, status) => {
@@ -115,6 +160,14 @@
           alert('Error: ' + status);
         }
       });
+    }
+
+    // Function to handle Enter key press
+    function handleKeyPress(event, buttonId) {
+      if (event.keyCode === 13) {
+        // Enter key was pressed, trigger the button click
+        document.getElementById(buttonId).click();
+      }
     }
 
   </script>
