@@ -7,7 +7,6 @@
   <title>
     Home - WalkMe
   </title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link href="../css/globals.css" rel="stylesheet">
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg&callback=initMap"
@@ -21,7 +20,7 @@
         <p class="text-center">
           WalkMe
         </p>
-      </h1>5
+      </h1>
       <h2 class="h2 text-xl">
         <p class="text-center">
           A web application to help you find the safest route to your destination.
@@ -36,50 +35,43 @@
 
   <!-- Add your JavaScript code here -->
   <script>
-    let map;
-    let directionsService;
-    let directionsRenderer;
+    // Note: This example requires that you consent to location sharing when
+    // prompted by your browser. If you see the error "The Geolocation service
+    // failed.", it means you probably did not give permission for the browser to
+    // locate you.
+    let map, directionsService, directionsRenderer;
 
     function initMap() {
-      // Create a map centered at the user's current location
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const currentLocation = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 12,
-              center: currentLocation
-            });
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 0, lng: 0 },
+        zoom: 14,
+      });
 
-            // Display the user's location indicator as a red arrow
-            /*const arrowIcon = {
-              path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-              scale: 5,
-              fillColor: "red",
-              fillOpacity: 1,
-              strokeWeight: 1,
-              rotation: position.coords.heading // Use the user's heading for rotation
-            };*/
+      // Try HTML5 geolocation.
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
 
-            new google.maps.Marker({
-              position: currentLocation,
-              map: map,
-            });
+          // Create a marker to show the user's current location
+          new google.maps.Marker({
+            position: pos,
+            map: map,
+            animation: google.maps.Animation.DROP, // Add a drop animation
+          });
 
-            directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
-          },
-          () => {
-            alert('Error: The Geolocation service failed.');
-          }
-        );
-      } else {
-        alert("Error: Your browser doesn't support geolocation.");
-      }
-    }
+          map.setCenter(pos);
+
+          directionsService = new google.maps.DirectionsService();
+          directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
+        },
+        () => {
+          handleLocationError(true, map.getCenter());
+        },
+      );
+    };
 
     function calculateAndDisplayRoute() {
       const destination = document.getElementById('destination').value;
@@ -105,6 +97,7 @@
         }
       });
     }
+
   </script>
 
 </body>
