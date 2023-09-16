@@ -34,23 +34,14 @@
 
       <!-- Search bar -->
       <section class="flex items-center justify-center py-8">
-        <input 
-          type="text"
-          class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-md"
-          id="fromDestinationTxtBox" 
-          placeholder="Enter starting address or current location"
-          onkeydown="handleKeyPress(event, 'GetDirectionsButton')"
-        >
-        <input type="text"
-          class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-md"
-          id="destination"
-          placeholder="Enter destination address"
-          onkeydown="handleKeyPress(event, 'GetDirectionsButton')"
-        >
-        <button
+        <input type="text" class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-md"
+          id="fromDestinationTxtBox" placeholder="Enter starting address or current location"
+          onkeydown="handleKeyPress(event, 'GetDirectionsButton')">
+        <input type="text" class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-md" id="destination"
+          placeholder="Enter destination address" onkeydown="handleKeyPress(event, 'GetDirectionsButton')">
+        <button id="GetDirectionsButton"
           class="w-1/8 p-2 m-2 border border-gray-400 rounded-md bg-green-500 hover:bg-green-600"
-          onclick="calculateAndDisplayRoute()"
-        >
+          onclick="calculateAndDisplayRoute()">
           <p class="text-md">
             Get Directions
           </p>
@@ -66,13 +57,11 @@
 
   <!-- Add your JavaScript code here -->
   <script>
-    // Note: This example requires that you consent to location sharing when
-    // prompted by your browser. If you see the error "The Geolocation service
-    // failed.", it means you probably did not give permission for the browser to
-    // locate you.
-    let map, directionsService, directionsRenderer, origin, heatmap;
+    let map, directionsService, directionsRenderer, heatmap;
     let heatmapData = []; // Define an empty array to store heatmap data
+    let pos; // Add this variable to store the current location as the origin
 
+    // Set map
     function initMap() {
       map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 0, lng: 0 },
@@ -80,10 +69,10 @@
         streetViewControl: false,
       });
 
-      // Try HTML5 geolocation.
+      // Get geolocation.
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const pos = {
+          pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
@@ -116,46 +105,73 @@
 
     function calculateAndDisplayRoute() {
       const destination = document.getElementById('destination').value;
+      const originInput = document.getElementById('fromDestinationTxtBox');
+      const originAddress = originInput.value;
 
       if (!destination) {
         alert('Please enter a destination address.');
         return;
       }
 
-      const request = {
-        origin: map.getCenter(),
-        destination: destination,
-        travelMode: 'DRIVING',
-      };
+      let origin;
 
-      directionsService.route(request, (result, status) => {
-        if (status === 'OK') {
-          directionsRenderer.setDirections(result);
+      if (originAddress === '' || originAddress === 'Current Location') {
+        // If fromDestinationTxtBox is empty or contains "Current Location", use current location as origin
+        origin = pos;
 
-          // Extract points along the route for heatmap data
-          const route = result.routes[0].legs[0];
-          const path = route.steps.flatMap((step) => {
-            return google.maps.geometry.encoding.decodePath(step.polyline.points);
-          });
+        const request = {
+          origin: origin,
+          destination: destination,
+          travelMode: 'WALKING',
+        };
 
-          // Convert the path points to LatLng objects and add them to heatmapData
-          heatmapData = path.map((point) => {
-            return new google.maps.LatLng(point.lat(), point.lng());
-          });
+        directionsService.route(request, (result, status) => {
+          if (status === 'OK') {
+            directionsRenderer.setDirections(result);
 
-          // Set the new heatmap data
-          heatmap.setData(heatmapData);
+            // Calculate the route distance and set the heatmap radius
+            const routeDistance = result.routes[0].legs[0].distance.value;
+            const heatmapRadius = Math.min(50, Math.max(10, routeDistance / 100));
 
-          // Calculate the route distance and set the heatmap radius
-          const routeDistance = route.distance.value;
-          const heatmapRadius = Math.min(50, Math.max(10, routeDistance / 100));
+            updateHeatmapRadius(heatmapRadius);
+          } else {
+            alert('Error: ' + status);
+          }
+        });
+      } else {
+        // Use the Geocoding service to convert the origin address to coordinates
+        const geocoder = new google.maps.Geocoder();
 
-          updateHeatmapRadius(heatmapRadius);
-        } else {
-          alert('Error: ' + status);
-        }
-      });
+        geocoder.geocode({ address: originAddress }, (results, status) => {
+          if (status === 'OK' && results.length > 0) {
+            const originLocation = results[0].geometry.location;
+
+            const request = {
+              origin: originLocation,
+              destination: destination,
+              travelMode: 'WALKING',
+            };
+
+            directionsService.route(request, (result, status) => {
+              if (status === 'OK') {
+                directionsRenderer.setDirections(result);
+
+                // Calculate the route distance and set the heatmap radius
+                const routeDistance = result.routes[0].legs[0].distance.value;
+                const heatmapRadius = Math.min(50, Math.max(10, routeDistance / 100));
+
+                updateHeatmapRadius(heatmapRadius);
+              } else {
+                alert('Error: ' + status);
+              }
+            });
+          } else {
+            alert('Geocoding error: ' + status);
+          }
+        });
+      }
     }
+
 
     function calculateRoute(origin, destination) {
       const request = {
