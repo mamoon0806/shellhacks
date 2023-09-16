@@ -124,12 +124,30 @@
         directionsService.route(request, (result, status) => {
           if (status === 'OK') {
             directionsRenderer.setDirections(result);
+            const route = result.routes[0].legs[0];
+            const path = route.steps.flatMap((step) => {
+              return google.maps.geometry.encoding.decodePath(step.polyline.points);
+            });
+
+            // Convert the path points to LatLng objects and add them to heatmapData
+            heatmapData = path.map((point) => {
+              return new google.maps.LatLng(point.lat(), point.lng());
+            });
+
+            // Set the new heatmap data
+            heatmap.setData(heatmapData);
 
             // Calculate the route distance and set the heatmap radius
             const routeDistance = result.routes[0].legs[0].distance.value;
             const heatmapRadius = Math.min(50, Math.max(10, routeDistance / 100));
 
-            updateHeatmapRadius(heatmapRadius);
+            // Convert the path points to LatLng objects and add them to heatmapData
+            heatmapData = path.map((point) => {
+              return new google.maps.LatLng(point.lat(), point.lng());
+            });
+
+            // Set the new heatmap data
+            heatmap.setData(heatmapData);
           } else {
             alert('Error: ' + status);
           }
@@ -151,12 +169,22 @@
             directionsService.route(request, (result, status) => {
               if (status === 'OK') {
                 directionsRenderer.setDirections(result);
+                const route = result.routes[0].legs[0];
+                const path = route.steps.flatMap((step) => {
+                  return google.maps.geometry.encoding.decodePath(step.polyline.points);
+                });
+
+                // Convert the path points to LatLng objects and add them to heatmapData
+                heatmapData = path.map((point) => {
+                  return new google.maps.LatLng(point.lat(), point.lng());
+                });
+
+                // Set the new heatmap data
+                heatmap.setData(heatmapData);
 
                 // Calculate the route distance and set the heatmap radius
                 const routeDistance = result.routes[0].legs[0].distance.value;
                 const heatmapRadius = Math.min(50, Math.max(10, routeDistance / 100));
-
-                updateHeatmapRadius(heatmapRadius);
               } else {
                 alert('Error: ' + status);
               }
@@ -167,7 +195,6 @@
         });
       }
     }
-
 
     function calculateRoute(origin, destination) {
       const request = {
