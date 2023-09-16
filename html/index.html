@@ -34,9 +34,17 @@
         <input 
           type="text"
           class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-xl"
+          id="fromDestinationTxtBox" 
+          placeholder="Enter starting address (or Current Location)"
+          onkeydown="handleKeyPress(event, 'GetDirectionsButton')"
+        >
+        <input type="text"
+          class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-xl"
           id="destination"
           placeholder="Enter destination address"
+          onkeydown="handleKeyPress(event, 'GetDirectionsButton')"
         >
+        <button id="GetDirectionsButton" onclick="calculateAndDisplayRoute()">Get Directions</button>
         <button
           class="w-1/4 p-2 m-2 border border-gray-400 rounded-md bg-blue-300 hover:bg-blue-500"
           onclick="calculateAndDisplayRoute()"
