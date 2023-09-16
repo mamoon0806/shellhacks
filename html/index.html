@@ -5,29 +5,47 @@
 <head>
   <meta charset="utf-8">
   <title>
-    Home - WalkMe
+    Home - Pedestría
   </title>
-  
-  <link src="css/globals.css" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg&libraries=visualization&callback=initMap"
-    async defer></script>
 </head>
 
 <body>
+  <!-- Button to open the sidebar -->
+  <span class="hamburgerBtn" onclick="toggleNav()">&#9776;</span>
+
+  <!-- Side Navigation Bar -->
+  <div class="sidenav" id="mySidenav">
+    <div class="menu-item">
+      <a href="./index.html" id="homeButton">Home</a>
+    </div>
+    <div class="menu-item">
+      <a href="./about.html" id="aboutButton">About</a>
+    </div>
+  </div>
+
+  <!-- Content -->
   <main class="w-full min-h-screen py-8">
     <section class="items-center">
       <h1 class="h1 font-bold text-4xl py-2">
         <p class="text-center">
-          Pedestria
+          <span class="animated-word">
+            <span class="letter" style="font-size: 3em; line-height: 1em;">P</span>
+            <span class="letter" style="font-size: 3em; line-height: 1em;">e</span>
+            <span class="letter" style="font-size: 3em; line-height: 1em;">d</span>
+            <span class="letter" style="font-size: 3em; line-height: 1em;">e</span>
+            <span class="letter" style="font-size: 3em; line-height: 1em;">s</span>
+            <span class="letter" style="font-size: 3em; line-height: 1em;">t</span>
+            <span class="letter" style="font-size: 3em; line-height: 1em;">r</span>
+            <span class="letter" style="font-size: 3em; line-height: 1em;">í</span>
+            <span class="letter" style="font-size: 3em; line-height: 1em;">a</span>
+          </span>
         </p>
       </h1>
+
       <h2 class="h2 text-2xl py-2">
         <p class="text-center">
           <em>
-            A web application to help you find the safest route to your destination.
+            Helping you find the safest and cleanest routes.
           </em>
         </p>
       </h2>
@@ -39,15 +57,20 @@
           onkeydown="handleKeyPress(event, 'GetDirectionsButton')">
         <input type="text" class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-md" id="destination"
           placeholder="Enter destination address" onkeydown="handleKeyPress(event, 'GetDirectionsButton')">
-        <button id="GetDirectionsButton"
-          class="w-1/8 p-2 m-2 border border-gray-400 rounded-md bg-green-500 hover:bg-green-600"
+        <button id="GetDirectionsButton" class="p-2 m-2 border border-gray-400 rounded-md direction-button"
+          style="background: linear-gradient(120deg, hsl(163, 72%, 52%), hsl(184, 100%, 38%)); color: white; width: 160px;"
           onclick="calculateAndDisplayRoute()">
+          <svg class="svgIcon" viewBox="0 0 512 512" height="1em" xmlns="http://www.w3.org/2000/svg" fill="white">
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm50.7-186.9L162.4 380.6c-19.4 7.5-38.5-11.6-31-31l55.5-144.3c3.3-8.5 9.9-15.1 18.4-18.4l144.3-55.5c19.4-7.5 38.5 11.6 31 31L325.1 306.7c-3.2 8.5-9.9 15.1-18.4 18.4zM288 256a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z">
+            </path>
+          </svg>
           <p class="text-md">
             Get Directions
           </p>
         </button>
-      </section>
 
+      </section>
       <!-- Map container -->
       <div class="flex justify-center">
         <div id="map" class="flex h-96 w-3/4 border rounded-sm"></div>
@@ -55,177 +78,14 @@
     </section>
   </main>
 
-  <!-- Add your JavaScript code here -->
-  <script>
-    let map, directionsService, directionsRenderer, heatmap;
-    let heatmapData = []; // Define an empty array to store heatmap data
-    let pos; // Add this variable to store the current location as the origin
-
-    // Set map
-    function initMap() {
-      map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 0, lng: 0 },
-        zoom: 14,
-        streetViewControl: false,
-      });
-
-      // Get geolocation.
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-
-          // Create a marker to show the user's current location
-          new google.maps.Marker({
-            position: pos,
-            map: map,
-            animation: google.maps.Animation.DROP, // Add a drop animation
-          });
-
-          map.setCenter(pos);
-
-          directionsService = new google.maps.DirectionsService();
-          directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
-        },
-        () => {
-          handleLocationError(true, map.getCenter());
-        }
-      );
-
-      // Initialize the heatmap layer
-      heatmap = new google.maps.visualization.HeatmapLayer({
-        data: heatmapData,
-        map: map,
-        radius: 8, // Adjust the radius as needed
-        opacity: 0.6, // Adjust the opacity as needed
-      });
-    }
-
-    function calculateAndDisplayRoute() {
-      const destination = document.getElementById('destination').value;
-      const originInput = document.getElementById('fromDestinationTxtBox');
-      const originAddress = originInput.value;
-
-      if (!destination) {
-        alert('Please enter a destination address.');
-        return;
-      }
-
-      let origin;
-
-      if (originAddress === '' || originAddress === 'Current Location') {
-        // If fromDestinationTxtBox is empty or contains "Current Location", use current location as origin
-        origin = pos;
-
-        const request = {
-          origin: origin,
-          destination: destination,
-          travelMode: 'WALKING',
-        };
-
-        directionsService.route(request, (result, status) => {
-          if (status === 'OK') {
-            directionsRenderer.setDirections(result);
-            const route = result.routes[0].legs[0];
-            const path = route.steps.flatMap((step) => {
-              return google.maps.geometry.encoding.decodePath(step.polyline.points);
-            });
-
-            // Convert the path points to LatLng objects and add them to heatmapData
-            heatmapData = path.map((point) => {
-              return new google.maps.LatLng(point.lat(), point.lng());
-            });
-
-            // Set the new heatmap data
-            heatmap.setData(heatmapData);
-
-            // Calculate the route distance and set the heatmap radius
-            const routeDistance = result.routes[0].legs[0].distance.value;
-            const heatmapRadius = Math.min(50, Math.max(10, routeDistance / 100));
-
-            // Convert the path points to LatLng objects and add them to heatmapData
-            heatmapData = path.map((point) => {
-              return new google.maps.LatLng(point.lat(), point.lng());
-            });
-
-            // Set the new heatmap data
-            heatmap.setData(heatmapData);
-          } else {
-            alert('Error: ' + status);
-          }
-        });
-      } else {
-        // Use the Geocoding service to convert the origin address to coordinates
-        const geocoder = new google.maps.Geocoder();
-
-        geocoder.geocode({ address: originAddress }, (results, status) => {
-          if (status === 'OK' && results.length > 0) {
-            const originLocation = results[0].geometry.location;
-
-            const request = {
-              origin: originLocation,
-              destination: destination,
-              travelMode: 'WALKING',
-            };
-
-            directionsService.route(request, (result, status) => {
-              if (status === 'OK') {
-                directionsRenderer.setDirections(result);
-                const route = result.routes[0].legs[0];
-                const path = route.steps.flatMap((step) => {
-                  return google.maps.geometry.encoding.decodePath(step.polyline.points);
-                });
-
-                // Convert the path points to LatLng objects and add them to heatmapData
-                heatmapData = path.map((point) => {
-                  return new google.maps.LatLng(point.lat(), point.lng());
-                });
-
-                // Set the new heatmap data
-                heatmap.setData(heatmapData);
-
-                // Calculate the route distance and set the heatmap radius
-                const routeDistance = result.routes[0].legs[0].distance.value;
-                const heatmapRadius = Math.min(50, Math.max(10, routeDistance / 100));
-              } else {
-                alert('Error: ' + status);
-              }
-            });
-          } else {
-            alert('Geocoding error: ' + status);
-          }
-        });
-      }
-    }
-
-    function calculateRoute(origin, destination) {
-      const request = {
-        origin: origin,
-        destination: destination,
-        travelMode: 'WALKING' // You can change the travel mode as needed
-      };
-
-      directionsService.route(request, (result, status) => {
-        if (status === 'OK') {
-          directionsRenderer.setDirections(result);
-        } else {
-          alert('Error: ' + status);
-        }
-      });
-    }
-
-    // Function to handle Enter key press
-    function handleKeyPress(event, buttonId) {
-      if (event.keyCode === 13) {
-        // Enter key was pressed, trigger the button click
-        document.getElementById(buttonId).click();
-      }
-    }
-
-  </script>
-
+  <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/navbar.css">
+  <script src="../js/home.js"></script>
+  <script src="../js/navbar.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg&libraries=visualization&callback=initMap"
+    async defer></script>
 </body>
 
 </html>
