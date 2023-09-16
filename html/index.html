@@ -7,6 +7,7 @@
   <title>
     Home - WalkMe
   </title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link href="../css/globals.css" rel="stylesheet">
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg&callback=initMap"
@@ -21,15 +22,33 @@
           WalkMe
         </p>
       </h1>
-      <h2 class="h2 text-xl">
+      <h2 class="h2 text-2xl">
         <p class="text-center">
           A web application to help you find the safest route to your destination.
         </p>
       </h2>
-      <input type="text" id="destination" placeholder="Enter destination address">
-      <button onclick="calculateAndDisplayRoute()">Get Directions</button>
+
+      <!-- Search bar -->
+      <section class="flex items-center justify-center">
+        <input 
+          type="text"
+          class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-xl"
+          id="destination"
+          placeholder="Enter destination address"
+        >
+        <button
+          class="w-1/4 p-2 m-2 border border-gray-400 rounded-md bg-blue-300 hover:bg-blue-500"
+          onclick="calculateAndDisplayRoute()"
+        >
+          <p class="text-xl">
+            Get Directions
+          </p>
+        </button>
+      </section>
       <!-- Map container -->
-      <div id="map" style="height: 400px; width: 100%;"></div>
+      <div class="flex justify-center">
+        <div id="map" class="flex h-96 w-3/4"></div>
+      </div>
     </section>
   </main>
 
