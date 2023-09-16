@@ -293,17 +293,9 @@
         try {
           fetch("/api/1/0/0")
             .then(response => {
-              console.log(response);
-              response = response.blob()
+              console.log(response.body.blob_url);
+              imgElement.src = response.body.blob_url;
             })
-            .then(
-              blob => {
-                const newBlob = new Blob([blob], { type: "image/png" });
-                imgurl = URL.createObjectURL(newBlob);
-                imgElement.src = imgurl;
-                console.log(imgurl);
-              }
-            )
         } catch (err) {
           console.log("lol");
         }
