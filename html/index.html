@@ -107,10 +107,6 @@
       map.addListener("zoom_changed", () => {
         center = new google.maps.LatLng(map.getCenter().lat(), map.getCenter().lng());
         console.log(getTileCoordinate(center, map.getZoom()));
-
-        tileX = getTileCoordinate(center, map.getZoom()).x
-        tileY = getTileCoordinate(center, map.getZoom()).Y
-
       });
 
       const coordMapType = new CoordMapType(new google.maps.Size(256, 256));
@@ -268,7 +264,6 @@
 
     class CoordMapType {
       tileSize;
-      alt = null;
       maxZoom = 16;
       minZoom = 0;
       projection = null;
@@ -287,23 +282,17 @@
         imgElement.style.height = this.tileSize.height + "px";        
         imgElement.style.position = 'absolute';
         imgElement.style.zIndex = '2';
-      
-        try {
-          fetch("/api/1/0/0")
-            .then(
-              blob => { 
-                const newBlob = new Blob([blob], { type: "image/png" });
-                console.log(newBlob)
-                imgurl = URL.createObjectURL(newBlob);
-                imgElement.src = `https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/${zoom}/${coord.x}/${coord.y}?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg`;
-                console.log(imgElement.src);
-                div.appendChild(imgElement); 
-              }
-            )
+        
+        try{
+          imgElement.src = `https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/${zoom}/${coord.x}/${coord.y}?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg`;
+          console.log(imgElement.src);
+          div.appendChild(imgElement); 
+
         } catch (err) {
           console.log("Error" + err);
         }
-
+        
+        imgElement.style.opacity = '.2';
         div.innerHTML = String(coord);
         div.style.width = this.tileSize.width + "px";
         div.style.height = this.tileSize.height + "px";
