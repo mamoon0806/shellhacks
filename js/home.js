@@ -2,6 +2,8 @@ let map, directionsService, directionsRenderer, heatmap, airQuality;
 let heatmapData = []; // Define an empty array to store heatmap data
 let pos; // Add this variable to store the current location as the origin
 const TILE_SIZE = 256;
+document.getElementById("homeButton").style.pointerEvents = "none"; // Disable links
+document.getElementById("aboutButton").style.pointerEvents = "none"; // Disable links
 
 // Set map
 function initMap() {
