@@ -272,7 +272,15 @@
         this.tileSize = tileSize;
       }
       getTile(coord, zoom, ownerDocument) {
-        const div = ownerDocument.createElement("div");        
+        const div = ownerDocument.createElement("div");   
+        div.position = 'relative';
+        div.innerHTML = String(coord);
+        div.style.width = this.tileSize.width + "px";
+        div.style.height = this.tileSize.height + "px";
+        div.style.fontSize = "10";
+        div.style.borderStyle = "solid";
+        div.style.borderWidth = "1px";
+        div.style.borderColor = "#AAAAAA";     
 
         let api = '/api/'
         let imgurl;
@@ -292,15 +300,7 @@
           console.log("Error" + err);
         }
         
-        imgElement.style.opacity = '.2';
-        div.innerHTML = String(coord);
-        div.style.width = this.tileSize.width + "px";
-        div.style.height = this.tileSize.height + "px";
-        div.style.fontSize = "10";
-        div.style.borderStyle = "solid";
-        div.style.borderWidth = "1px";
-        div.style.borderColor = "#AAAAAA";
-
+        imgElement.style.opacity = '1';
         return div;
       }
 
