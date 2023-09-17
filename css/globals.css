@@ -15,6 +15,7 @@
 
 body {
   background: linear-gradient(120deg, #e0f5ff, #f0f0f0);
+  font-family: Arial, Helvetica, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,11 +86,6 @@ body {
 .direction-button:hover .svgIcon {
   transform: rotate(250deg);
   transition-duration: 1.5s;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
 }
 
 html {
