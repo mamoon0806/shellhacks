@@ -96,6 +96,7 @@ html {
   box-sizing: inherit;
 }
 
+/* tazio */
 .right-column {
   float: left;
   width: 33.3%;
@@ -151,6 +152,7 @@ html {
 .button:hover {
   background-color: #555;
 }
+/* tazio end */
 
 @media screen and (max-width: 650px) {
   .column {
