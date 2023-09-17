@@ -144,20 +144,7 @@
       const response = await fetch(url, options)
       const pollutionJSON = await response.json();
 
-      const pollutionScore = await pollutionJSON.indexes[0].aqi;
-      const category = await pollutionJSON.indexes[0].category;
-      const dominantPollutant = await pollutionJSON.indexes[0].dominantPollutant;
-      const dominantPollutionInfo = await pollutionJSON.pollutants.find(pollutants => pollutants.code === dominantPollutant);
-      console.log(dominantPollutionInfo);
-
-      const pollutionData = await {
-        "pollutionScore": pollutionScore,
-        "category": category,
-        "dominantPollutant": dominantPollutant
-        
-      };
-
-      return await pollutionData;
+      return await pollutionJSON;
     }
 
     function calculateAndDisplayRoute() {
@@ -207,12 +194,36 @@
               return new google.maps.LatLng(point.lat(), point.lng());
             });
 
-            console.log(heatmapData[0] + "\n   " + heatmapData[heatmapData.length - 1])
-            let data = getPollutionData(heatmapData[0]);
-            console.log(data);
+            let pollutionJSON = getPollutionData(heatmapData[0]);
 
-            data.then(function (result) {
+            pollutionJSON.then(function (result) {
               console.log(result);
+
+              const pollutionScore = result.indexes[0].aqi;
+              const category = result.indexes[0].category;
+              const dominantPollutant = result.indexes[0].dominantPollutant;
+              const dominantPollutionConcentrationValue = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.value;
+              const dominantPollutionConcentrationUnits = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.units;
+              const dominantPollutionSources = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.sources
+              const dominantPollutionEffects = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.effects
+              const healthRecs = result.healthRecommendations.generalPopulation
+              console.log(healthRecs)
+            });
+
+            pollutionJSON = getPollutionData(heatmapData[heatmapData.length - 1]);
+
+            pollutionJSON.then(function (result) {
+              console.log(result);
+
+              const pollutionScore = result.indexes[0].aqi;
+              const category = result.indexes[0].category;
+              const dominantPollutant = result.indexes[0].dominantPollutant;
+              const dominantPollutionConcentrationValue = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.value;
+              const dominantPollutionConcentrationUnits = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.units;
+              const dominantPollutionSources = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.sources
+              const dominantPollutionEffects = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.effects
+              const healthRecs = result.healthRecommendations.generalPopulation
+              console.log(healthRecs)
             });
             
 
@@ -329,10 +340,8 @@
       getTile(coord, zoom, ownerDocument) {
         const div = ownerDocument.createElement("div");   
         div.position = 'relative';
-        div.innerHTML = String(coord);
         div.style.width = this.tileSize.width + "px";
         div.style.height = this.tileSize.height + "px";
-        div.style.fontSize = "10";
         div.style.borderStyle = "solid";
         div.style.borderWidth = "1px";
         div.style.borderColor = "#AAAAAA";     
