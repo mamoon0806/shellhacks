@@ -212,14 +212,22 @@ let map, directionsService, directionsRenderer, heatmap;
         this.tileSize = tileSize;
       }
       getTile(coord, zoom, ownerDocument) {
-        const div = ownerDocument.createElement("div"); 
+        const div = ownerDocument.createElement("div");
+        div.innerHTML = String(coord);
+        div.style.position = "relative";
+        div.style.width = this.tileSize.width + "px";
+        div.style.height = this.tileSize.height + "px";
+        div.style.fontSize = "10";
+        div.style.borderStyle = "solid";
+        div.style.borderWidth = "1px";
+        div.style.borderColor = "#AAAAAA";
         
         var imgElement = new Image();
         imgElement.style.width = this.tileSize.width + "px";
         imgElement.style.height = this.tileSize.height + "px";        
         imgElement.style.position = 'absolute';
         imgElement.style.zIndex = '2';
-        //imgElement.style.opacity = '.2';
+        imgElement.style.opacity = '.2';
         
         try{
           imgElement.src = `https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/${zoom}/${coord.x}/${coord.y}?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg`;
@@ -229,14 +237,6 @@ let map, directionsService, directionsRenderer, heatmap;
         } catch (err) {
           console.log("Error" + err);
         }
-        
-        div.innerHTML = String(coord);
-        div.style.width = this.tileSize.width + "px";
-        div.style.height = this.tileSize.height + "px";
-        div.style.fontSize = "10";
-        div.style.borderStyle = "solid";
-        div.style.borderWidth = "1px";
-        div.style.borderColor = "#AAAAAA";
 
         return div;
       }
