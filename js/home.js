@@ -57,6 +57,39 @@ function initMap() {
 
 }
 
+async function getPollutionData(latlng) {
+
+  let url = "https://airquality.googleapis.com/v1/currentConditions:lookup?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg";
+  let latitude = latlng.lat();
+  let longitude = latlng.lng();
+
+  let data = {
+    "universal_aqi": true,
+    "location": {
+      "latitude": latitude,
+      "longitude": longitude
+    },
+    "extra_computations": [
+      "HEALTH_RECOMMENDATIONS",
+      "DOMINANT_POLLUTANT_CONCENTRATION",
+      "POLLUTANT_CONCENTRATION",  
+      "LOCAL_AQI",
+      "POLLUTANT_ADDITIONAL_INFO"
+    ],
+    "language_code": "en"
+  };
+
+  let options = {
+    method: 'POST',
+    body: JSON.stringify(data)
+  };
+
+  const response = await fetch(url, options)
+  const pollutionJSON = await response.json();
+
+  return await pollutionJSON;
+}
+
 function calculateAndDisplayRoute() {
   const destination = document.getElementById('destination').value;
   const originInput = document.getElementById('fromDestinationTxtBox');
@@ -104,6 +137,81 @@ function calculateAndDisplayRoute() {
           return new google.maps.LatLng(point.lat(), point.lng());
         });
 
+        let pollutionJSON = getPollutionData(heatmapData[0]);
+
+            let avgScore = 0;
+            let pollutionArr = [];
+
+            pollutionJSON.then((result) => {
+              console.log(result);
+
+              const pollutionScore = result.indexes[0].aqi;
+              const categoryOrigin = result.indexes[0].category;
+              const dominantPollutantOrigin = result.indexes[0].dominantPollutant;
+              const dominantPollutionConcentrationValueOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).concentration.value;
+              const dominantPollutionConcentrationUnitsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).concentration.units;
+              const dominantPollutionSourcesOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).additionalInfo.sources
+              const dominantPollutionEffectsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).additionalInfo.effects
+              const healthRecsOrigin = result.healthRecommendations.generalPopulation
+
+              const pollutionOrigin = {
+                pollutionScore: pollutionScore,
+                category: categoryOrigin,
+                dominantPollutant: dominantPollutantOrigin,
+                dominantPollutionConcentrationValue: dominantPollutionConcentrationValueOrigin,
+                dominantPollutionConcentrationUnits: dominantPollutionConcentrationUnitsOrigin,
+                dominantPollutionSources: dominantPollutionSourcesOrigin,
+                dominantPollutionEffects: dominantPollutionEffectsOrigin,
+                healthRecs: healthRecsOrigin
+              };
+
+              return pollutionOrigin;
+            })
+            .then((data) => {
+              pollutionJSON = getPollutionData(heatmapData[heatmapData.length - 1]);
+              pollutionArr.push(data);
+
+              pollutionJSON.then((result) => {
+                console.log(result);
+
+                const pollutionScoreDest = result.indexes[0].aqi;
+                const categoryDest = result.indexes[0].category;
+                const dominantPollutantDest = result.indexes[0].dominantPollutant;
+                const dominantPollutionConcentrationValueDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).concentration.value;
+                const dominantPollutionConcentrationUnitsDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).concentration.units;
+                const dominantPollutionSourcesDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).additionalInfo.sources
+                const dominantPollutionEffectsDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).additionalInfo.effects
+                const healthRecsDest = result.healthRecommendations.generalPopulation;
+
+                const pollutionDest = {
+                  pollutionScore: pollutionScoreDest,
+                  category: categoryDest,
+                  dominantPollutant: dominantPollutantDest,
+                  dominantPollutionConcentrationValue: dominantPollutionConcentrationValueDest,
+                  dominantPollutionConcentrationUnits: dominantPollutionConcentrationUnitsDest,
+                  dominantPollutionSources: dominantPollutionSourcesDest,
+                  dominantPollutionEffects: dominantPollutionEffectsDest,
+                  healthRecs: healthRecsDest
+                };
+
+                pollutionArr.push(pollutionDest);
+                console.log(pollutionArr[0].pollutionScore + " " + pollutionArr[1].pollutionScore);
+
+                avgScore = (pollutionArr[0].pollutionScore + pollutionArr[1].pollutionScore) / 2;
+                console.log(avgScore);
+
+                let div = document.createElement("div");
+                div.style.width = "1000px";
+                div.style.height = "120px";
+                div.style.padding = "0px 200px"
+                div.style.position = "relative";
+                div.innerHTML = "Average AQI for this trip: " + avgScore;
+
+                document.body.appendChild(div);
+
+              });
+            })
+
         // Set the new heatmap data
         heatmap.setData(heatmapData);
       } else {
@@ -139,6 +247,8 @@ function calculateAndDisplayRoute() {
 
             // Set the new heatmap data
             heatmap.setData(heatmapData);
+
+            
 
             // Calculate the route distance and set the heatmap radius
             const routeDistance = result.routes[0].legs[0].distance.value;
