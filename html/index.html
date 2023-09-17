@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  <!-- Content -->
+  <!-- Titles -->
   <main class="w-full min-h-screen py-8">
     <section class="items-center">
       <h1 class="h1 font-bold text-4xl py-2">
@@ -50,7 +50,7 @@
         </p>
       </h2>
 
-      <!-- Search bar -->
+      <!-- Directions Container -->
       <section class="flex items-center justify-center py-8">
         <input type="text" class="w-1/4 p-2 m-2 border border-gray-400 rounded-md input-field text-md"
           id="fromDestinationTxtBox" placeholder="Enter starting address or current location"
@@ -71,15 +71,15 @@
         </button>
 
       </section>
-      <!-- Map container -->
+      <!-- Map -->
       <div class="flex justify-center">
         <div id="map" class="flex h-96 w-3/4 border rounded-sm"></div>
       </div>
     </section>
 
+    <!-- Rating Container -->
     <center>
       <div class="rating-box h-10 w-3/4">
-        <!-- Add the rest of your rating inputs here -->
       </div>
       <div class="indicator-arrow"></div>
       <div class="rating-labels">
@@ -88,12 +88,27 @@
         <div class="label">Neutral</div>
         <div class="label">Ok</div>
         <div class="label">Good</div>
-      </div>      
+      </div>
+
+      <div id="tripdata"></div>
+
+      <div class="detailed-Info">
+        <div>
+          <h2>Score value units:</h2>
+          <label id="score"></label>
+        </div>
+
+        <div>
+          <h2>Pollution count:</h2>
+          <label id="pollutionCount"></label>
+        </div>
+
+        <div>
+          <h2>Health recommendations:</h2>
+          <label id="recommendation"></label>
+        </div>
+      </div>
     </center>
-
-    
-    <div id="tripdata"></div>
-
     </section>
   </main>
 
