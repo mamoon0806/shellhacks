@@ -97,6 +97,18 @@ body {
   transition-duration: 1.5s;
 }
 
+.float-container {
+  border: 3px solid black;
+  padding: 25px;
+}
+
+.description {
+  width: 50%;
+  float: left;
+  padding: 20px;
+  border: 2px solid 
+}
+
 #map {
   border: 4px solid #000; /* Adjust the thickness and color as needed */
 }
