@@ -232,6 +232,7 @@ let map, directionsService, directionsRenderer, heatmap;
         try{
           imgElement.src = `https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/${zoom}/${coord.x}/${coord.y}?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg`;
           console.log(imgElement.src);
+          console.log("hi");
           div.appendChild(imgElement); 
 
         } catch (err) {
