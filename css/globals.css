@@ -30,6 +30,11 @@
 
 body {
   background: linear-gradient(120deg, #e0f5ff, #f0f0f0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
 .animated-word {
@@ -98,5 +103,21 @@ body {
 }
 
 #map {
-  border: 4px solid #000; /* Adjust the thickness and color as needed */
+  border: 4px solid #000;
+  /* Adjust the thickness and color as needed */
+}
+
+/* Rating box styles */
+.rating-box {
+  background: linear-gradient(to right, #FF0000, #FFFF00, #00FF00);
+  border-radius: 5px;
+}
+
+.indicator-arrow {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 30px solid hsl(163, 72%, 52%); /* Change border-top to use the gradient */
+  margin-top: -40px; /* Adjust the margin to position the tip at the rating box */
 }
