@@ -1,26 +1,11 @@
 :root {
-  color: rgb(235, 235, 235);
-  background: linear-gradient(rgb(19, 24, 25), rgb(31, 31, 31));
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: rgb(19, 24, 25);
-    background: linear-gradient(rgb(235, 235, 235), rgb(255, 255, 255));
-  }
+  color: rgb(19, 24, 25);
+  background: linear-gradient(rgb(235, 235, 235), rgb(255, 255, 255));
 }
 
 .input-field {
-  border-radius: 0.25rem;
-  background: rgb(31, 31, 31);
-  color: rgb(235, 235, 235);
-}
-
-@media (prefers-color-scheme: dark) {
-  .input-field {
-    background: rgb(235, 235, 235);
-    color: rgb(19, 24, 25);
-  }
+  background: rgb(235, 235, 235);
+  color: rgb(19, 24, 25);
 }
 
 .mapbox {

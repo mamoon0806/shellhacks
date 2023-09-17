@@ -207,7 +207,8 @@ function calculateAndDisplayRoute() {
                 div.style.position = "relative";
                 div.innerHTML = "Average AQI for this trip: " + avgScore;
 
-                document.body.appendChild(div);
+                let parent = document.getElementById("tripdata");
+                parent.appendChild(div);
 
               });
             })
