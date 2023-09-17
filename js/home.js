@@ -1,6 +1,7 @@
 let map, directionsService, directionsRenderer, heatmap;
     let heatmapData = []; // Define an empty array to store heatmap data
     let pos; // Add this variable to store the current location as the origin
+    const TILE_SIZE = 256;
 
     // Set map
     function initMap() {
@@ -42,6 +43,16 @@ let map, directionsService, directionsRenderer, heatmap;
         radius: 9, // Adjust the radius as needed
         opacity: 1.0, // Adjust the opacity as needed
       });
+
+
+      map.addListener("zoom_changed", () => {
+        center = new google.maps.LatLng(map.getCenter().lat(), map.getCenter().lng());
+        console.log(getTileCoordinate(center, map.getZoom()));
+      });
+
+      const coordMapType = new CoordMapType(new google.maps.Size(256, 256));
+      map.overlayMapTypes.insertAt(0, coordMapType);
+
     }
 
     function calculateAndDisplayRoute() {
@@ -157,6 +168,32 @@ let map, directionsService, directionsRenderer, heatmap;
       });
     }
 
+    function getTileCoordinate(latLng, zoom){
+      const scale = 1 << zoom;
+      const worldCoordinate = project(latLng);
+
+      const tileCoordinate = new google.maps.Point(
+      Math.floor((worldCoordinate.x * scale) / TILE_SIZE),
+      Math.floor((worldCoordinate.y * scale) / TILE_SIZE),
+    );
+
+    return tileCoordinate;
+
+    }
+
+    function project(latLng) {
+      let siny = Math.sin((latLng.lat() * Math.PI) / 180);
+
+      // Truncating to 0.9999 effectively limits latitude to 89.189. This is
+      // about a third of a tile past the edge of the world tile.
+      siny = Math.min(Math.max(siny, -0.9999), 0.9999);
+      return new google.maps.Point(
+        TILE_SIZE * (0.5 + latLng.lng() / 360),
+        TILE_SIZE * (0.5 - Math.log((1 + siny) / (1 - siny)) / (4 * Math.PI)),
+      );
+    }
+
+
     // Function to handle Enter key press
     function handleKeyPress(event, buttonId) {
       if (event.keyCode === 13) {
@@ -164,3 +201,46 @@ let map, directionsService, directionsRenderer, heatmap;
         document.getElementById(buttonId).click();
       }
     }
+
+    class CoordMapType {
+      tileSize;
+      maxZoom = 16;
+      minZoom = 0;
+      projection = null;
+      radius = 6378137;
+      constructor(tileSize) {
+        this.tileSize = tileSize;
+      }
+      getTile(coord, zoom, ownerDocument) {
+        const div = ownerDocument.createElement("div"); 
+        
+        var imgElement = new Image();
+        imgElement.style.width = this.tileSize.width + "px";
+        imgElement.style.height = this.tileSize.height + "px";        
+        imgElement.style.position = 'absolute';
+        imgElement.style.zIndex = '2';
+        //imgElement.style.opacity = '.2';
+        
+        try{
+          imgElement.src = `https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/${zoom}/${coord.x}/${coord.y}?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg`;
+          console.log(imgElement.src);
+          div.appendChild(imgElement); 
+
+        } catch (err) {
+          console.log("Error" + err);
+        }
+        
+        div.innerHTML = String(coord);
+        div.style.width = this.tileSize.width + "px";
+        div.style.height = this.tileSize.height + "px";
+        div.style.fontSize = "10";
+        div.style.borderStyle = "solid";
+        div.style.borderWidth = "1px";
+        div.style.borderColor = "#AAAAAA";
+
+        return div;
+      }
+
+      releaseTile(tile) {}
+      
+}
