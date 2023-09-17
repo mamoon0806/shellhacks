@@ -235,33 +235,28 @@
         let api = '/api/'
         let imgurl;
         
-        let imgElement = document.createElement("img");
-        imgElement.style.width = '500px';
-        imgElement.style.height = '500px';
+        var imgElement = new Image();
+        imgElement.style.width = this.tileSize.width + "px";
+        imgElement.style.height = this.tileSize.height + "px";        
         imgElement.style.position = 'absolute';
-        imgElement.style.top = '0';
-        imgElement.style.left = '0';
-        imgElement.style.zIndex = '50';
+        imgElement.style.zIndex = '2';
       
         try {
           fetch("/api/1/0/0")
-            .then(response => {
-              console.log(response);
-              response = response.blob()
-            })
             .then(
-              blob => {
+              blob => { 
                 const newBlob = new Blob([blob], { type: "image/png" });
+                console.log(newBlob)
                 imgurl = URL.createObjectURL(newBlob);
-                imgElement.src = imgurl;
-                console.log(imgurl);
+                imgElement.src = `https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/${zoom}/${coord.x}/${coord.y}?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg`;
+                console.log(imgElement.src);
+                div.appendChild(imgElement); 
               }
             )
         } catch (err) {
-          console.log("lol");
+          console.log("Error" + err);
         }
 
-        div.appendChild(imgElement); 
         div.innerHTML = String(coord);
         div.style.width = this.tileSize.width + "px";
         div.style.height = this.tileSize.height + "px";
@@ -272,10 +267,13 @@
 
         return div;
       }
+
       releaseTile(tile) {}
+
       
 }
   </script>
+
 
 </body>
 

@@ -9,7 +9,7 @@ router.get('/:zoom/:x/:y', async (req, res) => {
         await fetch(`https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/${zoom}/${x}/${y}?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg`)
         .then(res =>  res.blob())
         .then(blob => {
-            console.log(blob.size);
+            console.log(blob)
             return blob;
         })
         ))
