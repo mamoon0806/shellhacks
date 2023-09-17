@@ -9,9 +9,8 @@ router.get('/:zoom/:x/:y', async (req, res) => {
     const url = await fetch(`https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/${zoom}/${x}/${y}?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg`)
         .then(res =>  res.blob())
         .then(blob => {
-          const newBlob = new Blob([blob], { type: "image/png" });
-          imgurl = URL.createObjectURL(newBlob);
-          console.log(imgurl);
+            console.log(blob)
+            return blob;
         })
 
     res.json({
