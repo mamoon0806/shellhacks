@@ -87,6 +87,82 @@ body {
   transition-duration: 1.5s;
 }
 
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.right-column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  margin-left: 50px;
+  padding: 0 8px;
+}
+
+.left-column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  margin-left: 250px;
+  padding: 0 8px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+}
+
+.about-section {
+  padding: 50px;
+  text-align: center;
+  background-color: #474e5d;
+  color: white;
+}
+
+.container {
+  padding: 0 16px;
+}
+
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.linked {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  margin-bottom: 12px;
+  margin-top: 8px;
+  padding: 8px;
+  color: white;
+  background-color: hsl(163, 72%, 52%);
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+
 #map {
   border: 4px solid #000;
   /* Adjust the thickness and color as needed */

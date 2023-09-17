@@ -363,11 +363,9 @@ class CoordMapType {
   }
   getTile(coord, zoom, ownerDocument) {
     const div = ownerDocument.createElement("div");
-    div.innerHTML = String(coord);
     div.style.position = "relative";
     div.style.width = this.tileSize.width + "px";
     div.style.height = this.tileSize.height + "px";
-    div.style.fontSize = "10";
     div.style.borderStyle = "solid";
     div.style.borderWidth = "1px";
     div.style.borderColor = "#AAAAAA";

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>
+        About - Pedestría
+    </title>
+</head>
+
+<body>
+    <!-- Button to open the sidebar -->
+  <span class="hamburgerBtn" onclick="toggleNav()">&#9776;</span>
+
+  <!-- Side Navigation Bar -->
+  <div class="sidenav" id="mySidenav">
+    <div class="menu-item">
+      <a href="./index.html" id="homeButton">Home</a>
+    </div>
+    <div class="menu-item">
+      <a href="./about.html" id="aboutButton">About</a>
+    </div>
+  </div>
+
+  <!-- Content-->
+  <main class="w-full min-h-screen py-8">
+    <section class="items-center">
+        <h1 class="h1 font-bold text-4xl py-2">
+            <p class="text-center">
+              <span class="animated-word">
+                <span class="letter" style="font-size: 3em; line-height: 1em;">A</span>
+                <span class="letter" style="font-size: 3em; line-height: 1em;">b</span>
+                <span class="letter" style="font-size: 3em; line-height: 1em;">o</span>
+                <span class="letter" style="font-size: 3em; line-height: 1em;">u</span>
+                <span class="letter" style="font-size: 3em; line-height: 1em;">t</span>
+              </span>
+            </p>
+          </h1>
+    </section>
+
+    <div class="about-section">
+        <p>A few words about who we are and what we do.</p>
+    </div>
+      
+    <h2 style="text-align:center; color:black"><strong>The Team</strong></h2>
+      <div class="row">
+        <div class="left-column">
+          <div class="card">
+            <img src="..\images\soypat.jpg" alt="Patrick" style="width:100%">
+            <div class="container">
+              <h2 style="color:black"><strong>Patrick Ijieh</strong></h2>
+              <p class="title" style="color:black">Back-End Developer</p>
+              <p style="color:black">
+                <em>
+                    I am a computer scientist who loves to code.
+                    I like to learn new things, read literature, play video games, and meet new people!
+                </em>
+              </p>
+              <p>
+                <button class="linked" onClick="window.location.href='https://www.linkedin.com/in/patrick-ijieh-51398321b/';">LinkedIn</button>
+              </p>
+            </div>
+          </div>
+        </div>
+      
+        <div class="right-column">
+          <div class="card">
+            <img src="..\images\soylex.png" alt="Alex" style="width:100%">
+            <div class="container">
+              <h2 style="color:black"><strong>Alex Patten</strong></h2>
+              <p class="title" style="color:black">UI/UX Developer</p>
+              <p style="color:black">
+                <em>
+                    I have an Australian Shepherd who knows a dozen tricks and enjoys agility. 
+                    I work for the government as a software engineer and aim to work for Riot Games eventually.
+                </em>
+              </p>
+              <p>
+                <button class="linked" onClick="window.location.href='https://www.alexpatten.me/';">Website</button>                 
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="left-column">
+          <div class="card">
+            <img src="..\images\soymoon.jpg" alt="Mamoon" style="width:100%">
+            <div class="container">
+              <h2 style="color:black"><strong>Mamoon Ulhaq</strong></h2>
+              <p class="title" style="color:black">API Developer</p>
+              <p style="color:black">
+                <em>
+                    I am a mechanical engineer who enjoys programming on the side. 
+                    In my free time I love watching college football, traveling, and learning how to cook new things.
+                </em>
+              </p>
+              <p>
+                <button class="linked" onClick="window.location.href='https://www.linkedin.com/in/mamoon-ulhaq/';">LinkedIn</button>
+              </p>
+            </div>
+          </div>
+        </div>
+      
+        <div class="right-column">
+          <div class="card">
+            <img src="..\images\soytaz.jpg" alt="Tazio" style="width:100%">
+            <div class="container">
+              <h2 style="color:black"><strong>Tazio Benfanti</strong></h2>
+              <p class="title" style="color:black">Front-End Developer</p>
+              <p style="color:black">
+                <em>
+                    I am a third year computer science student at UCF. 
+                    I enjoy watching and playing sports, gaming, and learning how to create new things.
+                </em>
+              </p>
+              <p>
+                <button class="linked" onClick="window.location.href='https://www.linkedin.com/in/tazio-benfanti/';">LinkedIn</button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </main>
+
+  <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/navbar.css">
+  <script src="../js/home.js"></script>
+  <script src="../js/navbar.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</body>
