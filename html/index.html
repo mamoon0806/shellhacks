@@ -114,6 +114,55 @@
 
     }
 
+    async function getPollutionData(latlng) {
+
+      let url = "https://airquality.googleapis.com/v1/currentConditions:lookup?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg";
+      let latitude = latlng.lat();
+      let longitude = latlng.lng();
+
+      let data = {
+        "universal_aqi": true,
+        "location": {
+          "latitude": latitude,
+          "longitude": longitude
+        },
+        "extra_computations": [
+          "HEALTH_RECOMMENDATIONS",
+          "DOMINANT_POLLUTANT_CONCENTRATION",
+          "POLLUTANT_CONCENTRATION",  
+          "LOCAL_AQI",
+          "POLLUTANT_ADDITIONAL_INFO"
+        ],
+        "language_code": "en"
+      };
+
+      let options = {
+        method: 'POST',
+        body: JSON.stringify(data)
+      };
+
+      const response = await fetch(url, options)
+      const pollutionJSON = await response.json();
+
+      const pollutionScore = await pollutionJSON.indexes[0].aqi;
+      const category = await pollutionJSON.indexes[0].category;
+      const dominantPollutant = await pollutionJSON.indexes[0].dominant_pollutant;
+      for(var i in pollutionJSON){
+        if(pollutionJSON[i].pollutants[i].name == dominantPollutant){
+          const dominantPollutantInfo = await pollutionJSON[i].pollutants[i];
+        }
+      }
+
+      const pollutionData = await {
+        "pollutionScore": pollutionScore,
+        "category": category,
+        "dominantPollutant": dominantPollutant
+
+      };
+
+      return await pollutionData;
+    }
+
     function calculateAndDisplayRoute() {
       const destination = document.getElementById('destination').value;
       const originInput = document.getElementById('fromDestinationTxtBox');
@@ -160,6 +209,15 @@
             heatmapData = path.map((point) => {
               return new google.maps.LatLng(point.lat(), point.lng());
             });
+
+            console.log(heatmapData[0] + "\n   " + heatmapData[heatmapData.length - 1])
+            let data = getPollutionData(heatmapData[0]);
+            console.log(data);
+
+            data.then(function (result) {
+              console.log(result);
+            });
+            
 
             // Set the new heatmap data
             heatmap.setData(heatmapData);
