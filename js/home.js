@@ -72,7 +72,7 @@ async function getPollutionData(latlng) {
     "extra_computations": [
       "HEALTH_RECOMMENDATIONS",
       "DOMINANT_POLLUTANT_CONCENTRATION",
-      "POLLUTANT_CONCENTRATION",
+      "POLLUTANT_CONCENTRATION",  
       "LOCAL_AQI",
       "POLLUTANT_ADDITIONAL_INFO"
     ],
@@ -139,90 +139,84 @@ function calculateAndDisplayRoute() {
 
         let pollutionJSON = getPollutionData(heatmapData[0]);
 
-        let avgScore = 0;
-        let pollutionArr = [];
-
-        pollutionJSON.then((result) => {
-          console.log(result);
-
-          const scoreLabel = document.getElementById('score');
-          const pollutionScore = result.indexes[0].aqi;
-          scoreLabel.textContent = pollutionScore;
-
-          const categoryOrigin = result.indexes[0].category;
-          const dominantPollutantOrigin = result.indexes[0].dominantPollutant;
-
-          const pollutionLabel = document.getElementById('pollutionCount');
-          const dominantPollutionConcentrationValueOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).concentration.value;
-          const dominantPollutionConcentrationUnitsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).concentration.units;
-          pollutionLabel.textContent = dominantPollutionConcentrationValueOrigin + " --- " + dominantPollutionConcentrationUnitsOrigin;
-
-          const dominantPollutionSourcesOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).additionalInfo.sources
-          const dominantPollutionEffectsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).additionalInfo.effects
-
-          const recommendationLabel = document.getElementById('recommendation');
-          const healthRecsOrigin = result.healthRecommendations.generalPopulation
-          recommendationLabel.textContent = healthRecsOrigin;
-
-          const pollutionOrigin = {
-            pollutionScore: pollutionScore,
-            category: categoryOrigin,
-            dominantPollutant: dominantPollutantOrigin,
-            dominantPollutionConcentrationValue: dominantPollutionConcentrationValueOrigin,
-            dominantPollutionConcentrationUnits: dominantPollutionConcentrationUnitsOrigin,
-            dominantPollutionSources: dominantPollutionSourcesOrigin,
-            dominantPollutionEffects: dominantPollutionEffectsOrigin,
-            healthRecs: healthRecsOrigin
-          };
-
-          return pollutionOrigin;
-        })
-          .then((data) => {
-            pollutionJSON = getPollutionData(heatmapData[heatmapData.length - 1]);
-            pollutionArr.push(data);
+            let avgScore = 0;
+            let pollutionArr = [];
 
             pollutionJSON.then((result) => {
               console.log(result);
 
-              const scoreLabel = document.getElementById('score');
               const pollutionScore = result.indexes[0].aqi;
-              scoreLabel.textContent = pollutionScore;
-
               const categoryOrigin = result.indexes[0].category;
               const dominantPollutantOrigin = result.indexes[0].dominantPollutant;
-
-              const pollutionLabel = document.getElementById('pollutionCount');
               const dominantPollutionConcentrationValueOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).concentration.value;
               const dominantPollutionConcentrationUnitsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).concentration.units;
-              pollutionLabel.textContent = dominantPollutionConcentrationValueOrigin + " --- " + dominantPollutionConcentrationUnitsOrigin;
-
               const dominantPollutionSourcesOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).additionalInfo.sources
               const dominantPollutionEffectsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).additionalInfo.effects
-
-              const recommendationLabel = document.getElementById('recommendation');
               const healthRecsOrigin = result.healthRecommendations.generalPopulation
-              recommendationLabel.textContent = healthRecsOrigin;
+              console.log(healthRecsOrigin)
 
-              pollutionDest = {
-                pollutionScore: pollutionScoreDest,
-                category: categoryDest,
-                dominantPollutant: dominantPollutantDest,
-                dominantPollutionConcentrationValue: dominantPollutionConcentrationValueDest,
-                dominantPollutionConcentrationUnits: dominantPollutionConcentrationUnitsDest,
-                dominantPollutionSources: dominantPollutionSourcesDest,
-                dominantPollutionEffects: dominantPollutionEffectsDest,
-                healthRecs: healthRecsDest
+              const pollutionOrigin = {
+                pollutionScore: pollutionScore,
+                category: categoryOrigin,
+                dominantPollutant: dominantPollutantOrigin,
+                dominantPollutionConcentrationValue: dominantPollutionConcentrationValueOrigin,
+                dominantPollutionConcentrationUnits: dominantPollutionConcentrationUnitsOrigin,
+                dominantPollutionSources: dominantPollutionSourcesOrigin,
+                dominantPollutionEffects: dominantPollutionEffectsOrigin,
+                healthRecs: healthRecsOrigin
               };
 
-              pollutionArr.push(pollutionDest);
-              console.log(pollutionArr[0].pollutionScore + " " + pollutionArr[1].pollutionScore);
+              return pollutionOrigin;
+            })
+            .then((data) => {
+              pollutionJSON = getPollutionData(heatmapData[heatmapData.length - 1]);
+              pollutionArr.push(data);
 
-              avgScore = (pollutionArr[0].pollutionScore + pollutionArr[1].pollutionScore) / 2;
-              console.log(avgScore);
+              pollutionJSON.then((result) => {
+                console.log(result);
 
-              moveIndicator(avgScore);
-            });
-          })
+                const pollutionScoreDest = result.indexes[0].aqi;
+                const categoryDest = result.indexes[0].category;
+                const dominantPollutantDest = result.indexes[0].dominantPollutant;
+                const dominantPollutionConcentrationValueDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).concentration.value;
+                const dominantPollutionConcentrationUnitsDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).concentration.units;
+                const dominantPollutionSourcesDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).additionalInfo.sources
+                const dominantPollutionEffectsDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).additionalInfo.effects
+                const healthRecsDest = result.healthRecommendations.generalPopulation;
+
+                const pollutionDest = {
+                  pollutionScore: pollutionScoreDest,
+                  category: categoryDest,
+                  dominantPollutant: dominantPollutantDest,
+                  dominantPollutionConcentrationValue: dominantPollutionConcentrationValueDest,
+                  dominantPollutionConcentrationUnits: dominantPollutionConcentrationUnitsDest,
+                  dominantPollutionSources: dominantPollutionSourcesDest,
+                  dominantPollutionEffects: dominantPollutionEffectsDest,
+                  healthRecs: healthRecsDest
+                };
+
+                pollutionArr.push(pollutionDest);
+                console.log(pollutionArr[0].pollutionScore + " " + pollutionArr[1].pollutionScore);
+
+                avgScore = (pollutionArr[0].pollutionScore + pollutionArr[1].pollutionScore) / 2;
+                console.log(avgScore);
+                moveIndicator(avgScore);
+
+                let div = document.createElement("div");
+                div.id = "tripMetadata";
+                div.style.width = "1000px";
+                div.style.height = "120px";
+                div.style.padding = "0px 200px"
+                div.style.position = "relative";
+
+
+                let parent = document.getElementById("tripdata");
+                if(document.getElementById("tripMetadata") === null) {
+                  parent.appendChild(div);
+                }
+              });
+            })
+
         // Set the new heatmap data
         heatmap.setData(heatmapData);
       } else {
@@ -258,6 +252,8 @@ function calculateAndDisplayRoute() {
 
             // Set the new heatmap data
             heatmap.setData(heatmapData);
+
+            
 
             // Calculate the route distance and set the heatmap radius
             const routeDistance = result.routes[0].legs[0].distance.value;
