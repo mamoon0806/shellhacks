@@ -202,49 +202,6 @@ function handleKeyPress(event, buttonId) {
   }
 }
 
-class CoordMapType {
-  tileSize;
-  maxZoom = 16;
-  minZoom = 0;
-  projection = null;
-  radius = 6378137;
-  constructor(tileSize) {
-    this.tileSize = tileSize;
-  }
-  getTile(coord, zoom, ownerDocument) {
-    const div = ownerDocument.createElement("div");
-
-    var imgElement = new Image();
-    imgElement.style.width = this.tileSize.width + "px";
-    imgElement.style.height = this.tileSize.height + "px";
-    imgElement.style.position = 'absolute';
-    imgElement.style.zIndex = '2';
-    //imgElement.style.opacity = '.2';
-
-    try {
-      imgElement.src = `https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/${zoom}/${coord.x}/${coord.y}?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg`;
-      console.log(imgElement.src);
-      div.appendChild(imgElement);
-
-    } catch (err) {
-      console.log("Error" + err);
-    }
-
-    div.innerHTML = String(coord);
-    div.style.width = this.tileSize.width + "px";
-    div.style.height = this.tileSize.height + "px";
-    div.style.fontSize = "10";
-    div.style.borderStyle = "solid";
-    div.style.borderWidth = "1px";
-    div.style.borderColor = "#AAAAAA";
-
-    return div;
-  }
-
-  releaseTile(tile) { }
-
-}
-
 // Function to move the indicator arrow based on airQuality
 function moveIndicator(airQuality) {
   const indicatorArrow = document.querySelector('.indicator-arrow');
@@ -273,7 +230,6 @@ function project(latLng) {
     TILE_SIZE * (0.5 - Math.log((1 + siny) / (1 - siny)) / (4 * Math.PI)),
   );
 }
-
 
 // Function to handle Enter key press
 function handleKeyPress(event, buttonId) {
