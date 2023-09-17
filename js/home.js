@@ -201,6 +201,7 @@ function calculateAndDisplayRoute() {
                 console.log(avgScore);
 
                 let div = document.createElement("div");
+                div.id = "tripMetadata";
                 div.style.width = "1000px";
                 div.style.height = "120px";
                 div.style.padding = "0px 200px"
@@ -208,8 +209,9 @@ function calculateAndDisplayRoute() {
                 div.innerHTML = "Average AQI for this trip: " + avgScore;
 
                 let parent = document.getElementById("tripdata");
-                parent.appendChild(div);
-
+                if(document.getElementById("tripMetadata") === null) {
+                  parent.appendChild(div);
+                }
               });
             })
 
