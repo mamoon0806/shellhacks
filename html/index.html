@@ -200,14 +200,13 @@
               console.log(result);
 
               const pollutionScore = result.indexes[0].aqi;
-              const category = result.indexes[0].category;
-              const dominantPollutant = result.indexes[0].dominantPollutant;
-              const dominantPollutionConcentrationValue = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.value;
-              const dominantPollutionConcentrationUnits = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.units;
-              const dominantPollutionSources = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.sources
-              const dominantPollutionEffects = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.effects
-              const healthRecs = result.healthRecommendations.generalPopulation
-              console.log(healthRecs)
+              const categoryOrigin = result.indexes[0].category;
+              const dominantPollutantOrigin = result.indexes[0].dominantPollutant;
+              const dominantPollutionConcentrationValueOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.value;
+              const dominantPollutionConcentrationUnitsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.units;
+              const dominantPollutionSourcesOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.sources
+              const dominantPollutionEffectsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.effects
+              const healthRecsOrigin = result.healthRecommendations.generalPopulation
             });
 
             pollutionJSON = getPollutionData(heatmapData[heatmapData.length - 1]);
@@ -215,15 +214,14 @@
             pollutionJSON.then(function (result) {
               console.log(result);
 
-              const pollutionScore = result.indexes[0].aqi;
-              const category = result.indexes[0].category;
-              const dominantPollutant = result.indexes[0].dominantPollutant;
-              const dominantPollutionConcentrationValue = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.value;
-              const dominantPollutionConcentrationUnits = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.units;
-              const dominantPollutionSources = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.sources
-              const dominantPollutionEffects = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.effects
-              const healthRecs = result.healthRecommendations.generalPopulation
-              console.log(healthRecs)
+              const pollutionScoreDest = result.indexes[0].aqi;
+              const categoryDest = result.indexes[0].category;
+              const dominantPollutantDest = result.indexes[0].dominantPollutant;
+              const dominantPollutionConcentrationValueDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.value;
+              const dominantPollutionConcentrationUnitsDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.units;
+              const dominantPollutionSourcesDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.sources
+              const dominantPollutionEffectsDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.effects
+              const healthRecsDest = result.healthRecommendations.generalPopulation
             });
             
 
