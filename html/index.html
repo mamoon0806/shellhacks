@@ -204,10 +204,10 @@
               const pollutionScore = result.indexes[0].aqi;
               const categoryOrigin = result.indexes[0].category;
               const dominantPollutantOrigin = result.indexes[0].dominantPollutant;
-              const dominantPollutionConcentrationValueOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.value;
-              const dominantPollutionConcentrationUnitsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.units;
-              const dominantPollutionSourcesOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.sources
-              const dominantPollutionEffectsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.effects
+              const dominantPollutionConcentrationValueOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).concentration.value;
+              const dominantPollutionConcentrationUnitsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).concentration.units;
+              const dominantPollutionSourcesOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).additionalInfo.sources
+              const dominantPollutionEffectsOrigin = result.pollutants.find(pollutants => pollutants.code === dominantPollutantOrigin).additionalInfo.effects
               const healthRecsOrigin = result.healthRecommendations.generalPopulation
             });
 
@@ -219,10 +219,10 @@
               const pollutionScoreDest = result.indexes[0].aqi;
               const categoryDest = result.indexes[0].category;
               const dominantPollutantDest = result.indexes[0].dominantPollutant;
-              const dominantPollutionConcentrationValueDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.value;
-              const dominantPollutionConcentrationUnitsDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).concentration.units;
-              const dominantPollutionSourcesDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.sources
-              const dominantPollutionEffectsDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutant).additionalInfo.effects
+              const dominantPollutionConcentrationValueDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).concentration.value;
+              const dominantPollutionConcentrationUnitsDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).concentration.units;
+              const dominantPollutionSourcesDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).additionalInfo.sources
+              const dominantPollutionEffectsDest = result.pollutants.find(pollutants => pollutants.code === dominantPollutantDest).additionalInfo.effects
               const healthRecsDest = result.healthRecommendations.generalPopulation
             });
             
