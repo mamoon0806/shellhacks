@@ -261,3 +261,68 @@ function moveIndicator(airQuality) {
     console.log('Invalid airQuality value');
   }
 }
+
+function project(latLng) {
+  let siny = Math.sin((latLng.lat() * Math.PI) / 180);
+
+  // Truncating to 0.9999 effectively limits latitude to 89.189. This is
+  // about a third of a tile past the edge of the world tile.
+  siny = Math.min(Math.max(siny, -0.9999), 0.9999);
+  return new google.maps.Point(
+    TILE_SIZE * (0.5 + latLng.lng() / 360),
+    TILE_SIZE * (0.5 - Math.log((1 + siny) / (1 - siny)) / (4 * Math.PI)),
+  );
+}
+
+
+// Function to handle Enter key press
+function handleKeyPress(event, buttonId) {
+  if (event.keyCode === 13) {
+    // Enter key was pressed, trigger the button click
+    document.getElementById(buttonId).click();
+  }
+}
+
+class CoordMapType {
+  tileSize;
+  maxZoom = 16;
+  minZoom = 0;
+  projection = null;
+  radius = 6378137;
+  constructor(tileSize) {
+    this.tileSize = tileSize;
+  }
+  getTile(coord, zoom, ownerDocument) {
+    const div = ownerDocument.createElement("div");
+    div.innerHTML = String(coord);
+    div.style.position = "relative";
+    div.style.width = this.tileSize.width + "px";
+    div.style.height = this.tileSize.height + "px";
+    div.style.fontSize = "10";
+    div.style.borderStyle = "solid";
+    div.style.borderWidth = "1px";
+    div.style.borderColor = "#AAAAAA";
+
+    var imgElement = new Image();
+    imgElement.style.width = this.tileSize.width + "px";
+    imgElement.style.height = this.tileSize.height + "px";
+    imgElement.style.position = 'absolute';
+    imgElement.style.zIndex = '2';
+    imgElement.style.opacity = '.2';
+
+    try {
+      imgElement.src = `https://airquality.googleapis.com/v1/mapTypes/US_AQI/heatmapTiles/${zoom}/${coord.x}/${coord.y}?key=AIzaSyDxn11dlm134OPDCeb18AgK5B-rjlQ7msg`;
+      console.log(imgElement.src);
+      console.log("hi");
+      div.appendChild(imgElement);
+
+    } catch (err) {
+      console.log("Error" + err);
+    }
+
+    return div;
+  }
+
+  releaseTile(tile) { }
+
+}
