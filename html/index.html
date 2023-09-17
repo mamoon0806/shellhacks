@@ -146,18 +146,15 @@
 
       const pollutionScore = await pollutionJSON.indexes[0].aqi;
       const category = await pollutionJSON.indexes[0].category;
-      const dominantPollutant = await pollutionJSON.indexes[0].dominant_pollutant;
-      for(var i in pollutionJSON){
-        if(pollutionJSON[i].pollutants[i].name == dominantPollutant){
-          const dominantPollutantInfo = await pollutionJSON[i].pollutants[i];
-        }
-      }
+      const dominantPollutant = await pollutionJSON.indexes[0].dominantPollutant;
+      const dominantPollutionInfo = await pollutionJSON.pollutants.find(pollutants => pollutants.code === dominantPollutant);
+      console.log(dominantPollutionInfo);
 
       const pollutionData = await {
         "pollutionScore": pollutionScore,
         "category": category,
         "dominantPollutant": dominantPollutant
-
+        
       };
 
       return await pollutionData;
