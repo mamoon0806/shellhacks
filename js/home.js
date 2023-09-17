@@ -199,6 +199,7 @@ function calculateAndDisplayRoute() {
 
                 avgScore = (pollutionArr[0].pollutionScore + pollutionArr[1].pollutionScore) / 2;
                 console.log(avgScore);
+                moveIndicator(avgScore);
 
                 let div = document.createElement("div");
                 div.style.width = "1000px";
@@ -317,17 +318,13 @@ function handleKeyPress(event, buttonId) {
 // Function to move the indicator arrow based on airQuality
 function moveIndicator(airQuality) {
   const indicatorArrow = document.querySelector('.indicator-arrow');
+  let newVal = (((airQuality - 0) * (500 - -500)) / (100 - 0)) + -500;
+  console.log(newVal)
 
-  // Check the airQuality variable and set the appropriate horizontal position
-  if (airQuality === 'Good') {
-    // Move 40 pixels to the right
-    indicatorArrow.style.transform = 'translateX(490px)';
-  } else if (airQuality === 'Bad') {
-    // Move 40 pixels to the left
-    indicatorArrow.style.transform = 'translateX(-490px)';
-  } else {
-    // Handle other cases or defaults here
-    console.log('Invalid airQuality value');
+  try {
+    indicatorArrow.style.transform = 'translateX(' + newVal + 'px)';
+  } catch (error) {
+    console.log(error);
   }
 }
 
