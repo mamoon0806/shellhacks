@@ -49,9 +49,12 @@
       </section>
 
       <!-- Map container -->
-      <div class="flex justify-center">
+      <div class="flex justify-center items-center">
         <div id="map" class="flex h-96 w-3/4 border rounded-sm"></div>
       </div>
+
+      <!-- Trip metadata -->
+      <div id="tripData"></div>
     </section>
   </main>
 
@@ -260,9 +263,12 @@
                 let div = document.createElement("div");
                 div.style.width = "300px";
                 div.style.height = "120px";
+                div.style.textAlign = "center";
+                div.style.justifyContent = "center";
                 div.innerHTML = "Average AQI for this trip: " + avgScore;
 
-                document.body.appendChild(div);
+                let parent = document.getElementById("tripData");
+                parent.appendChild(div);
 
               });
             })
